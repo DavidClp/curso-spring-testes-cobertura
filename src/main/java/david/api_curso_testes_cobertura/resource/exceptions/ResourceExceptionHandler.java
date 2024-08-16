@@ -1,5 +1,6 @@
 package david.api_curso_testes_cobertura.resource.exceptions;
 
+import david.api_curso_testes_cobertura.services.exceptions.DataIntegratyException;
 import david.api_curso_testes_cobertura.services.exceptions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,5 +22,15 @@ public class ResourceExceptionHandler {
                 request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(DataIntegratyException.class)
+    public ResponseEntity<StandardError>dataIntegrationViolationException(DataIntegratyException ex, HttpServletRequest request){
+        StandardError error = new StandardError(LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }
